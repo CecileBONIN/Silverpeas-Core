@@ -47,12 +47,12 @@
   String language = request.getParameter("Language");
   String axisId = request.getParameter("axisId");
   String highlightFirst = request.getParameter("highlightFirst");
-  
+  String content = null;
 
   try {
 if (StringUtil.isDefined(language))
 {
-String content = WysiwygController.load(componentId, objectId, language);
+content = WysiwygController.load(componentId, objectId, language);
 
 //if content not found in specified language, check other ones
 if (!StringUtil.isDefined(content))
@@ -76,14 +76,16 @@ content = replacement.replaceKeyByValue(content);
 if(StringUtil.isDefined(axisId)){
 content = new HighlightGlossaryTerms().searchReplace(content,"highlight-silver",axisId,StringUtil.getBooleanValue(highlightFirst),language);
 }
-      if(content == null) {
-        content = "";
-      }
-out.println(content);
 }
 else
 {
-out.println(WysiwygController.loadFileAndAttachment(spaceId, componentId, objectId));
+content = WysiwygController.loadFileAndAttachment(spaceId, componentId, objectId);
 }
+
+if(content == null) {
+  content = "";
+}
+out.println(content);
+
   } catch (WysiwygException exc) {}
 %>
